@@ -8,7 +8,8 @@ import ctypes
 import os
 
 
-
+time_when_several_prompts = 10
+use_f5_refresh=False
 
 dico_prompting={}
 
@@ -21,16 +22,16 @@ dico_prompting["Y_UP"]=""
 dico_prompting["X_DOWN"]=""
 dico_prompting["X_UP"]=""
 
-dico_prompting["DOWN_DOWN"]=""
-dico_prompting["UP_DOWN"]=""
-dico_prompting["RIGHT_DOWN"]=""
-dico_prompting["LEFT_DOWN"]=""
+dico_prompting["DOWN_DOWN"]="Can you do in python ?"
+dico_prompting["UP_DOWN"]= ["Can you do in C# ?", "Can you do in Javascript ?", "Can you do in Python ?"]
+dico_prompting["RIGHT_DOWN"]="Can you do in Lua ?"
+dico_prompting["LEFT_DOWN"]="Can you do in Rust ?"
 
 dico_prompting["SIDE_RIGHT_DOWN"]=""
 dico_prompting["SIDE_LEFT_DOWN"]=""
 
-dico_prompting["THUMB_RIGHT_DOWN"]=""
-dico_prompting["THUMB_LEFT_DOWN"]=""
+dico_prompting["THUMB_RIGHT_DOWN"]="translate in japonese and correct ponctuation. Export in Markdown"
+dico_prompting["THUMB_LEFT_DOWN"]="Translate in chinese and correct ponctuation. Export in Markdown"
 
 
 
@@ -43,7 +44,8 @@ dico_prompting["LEFT_TRIGGER_DOWN"]="Translate that in french and correct ponctu
 dico_prompting["RIGHT_TRIGGER_DOWN"]="Translate that in english and correct ponctuation. Export in Markdown"
 
 
-bool_create_new_window = True
+
+bool_create_new_window = False
 
 
 # Threshold for trigger pressure (80%)
@@ -51,64 +53,81 @@ TRIGGER_THRESHOLD = 0.8 * 255  # Assuming trigger values range from 0 to 255
 
 
 def prompt_chat_gpt_by_firefox(prompt_text):
-    if(prompt_text==""):    
-        print("No prompting text")
-        return
+    global bool_create_new_window
     time.sleep(0.1)
     keyboard.press_and_release('ctrl+c')
     time.sleep(0.1)
     keyboard.press_and_release('ctrl+x')
-
-    # Find the Firefox window by title
-    firefox_windows = gw.getWindowsWithTitle('Mozilla Firefox')
-
-    # Open Firefox if it's not already open
-    if firefox_windows is None or len(firefox_windows)==0:
-        
-        firefox_path = "C:/Program Files/Mozilla Firefox/firefox.exe"
-        
-        if not os.path.exists(firefox_path):
-            print("Firefox path does not exist and firefox is not open. Please install Firefox or open it manually.")
-            return
-        
-        print ("Opening Firefox")
-        ctypes.windll.shell32.ShellExecuteW(None, "open", firefox_path, None, None, 1)
-        return
-    firefox_window = gw.getWindowsWithTitle('Mozilla Firefox')[0]
-    # Focus the Firefox window
-    firefox_window.activate()
-
-   
-    firefox_window.show()
-    firefox_window.maximize()
-
-    time.sleep(1)
-    if bool_create_new_window:
-        keyboard.press_and_release('ctrl+t')
-        time.sleep(3)
-        keyboard.write("https://chat.openai.com/")
-        keyboard.press_and_release('enter')
-        time.sleep(3)
-    else:
-        keyboard.press_and_release('ctrl+f5')
-    time.sleep(3)
+    time.sleep(0.1)
 
     clipboard_content = pyperclip.paste()
-    time.sleep(0.1)
-    pyperclip.copy(prompt_text)
-    time.sleep(0.1)
-    keyboard.press_and_release('ctrl+v')
-    time.sleep(0.1)
+    if(clipboard_content==""):    
+        print("Cliboard content")
+        return
 
-    keyboard.press_and_release('shift+enter')
-    time.sleep(0.1)
+    if not isinstance(prompt_text, list):
+        prompt_text = [prompt_text]
+    
+    for t in prompt_text:
+        if(t==""):    
+            print("No prompting text")
+            continue
+      
+#test
+        # Find the Firefox window by title
+        firefox_windows = gw.getWindowsWithTitle('Mozilla Firefox')
 
-    # Restore the original clipboard content
-    pyperclip.copy(clipboard_content)
-    time.sleep(0.1)
-    keyboard.press_and_release('ctrl+v')
-    time.sleep(0.1)
-    keyboard.press_and_release('enter')
+        # Open Firefox if it's not already open
+        if firefox_windows is None or len(firefox_windows)==0:
+            
+            firefox_path = "C:/Program Files/Mozilla Firefox/firefox.exe"
+            
+            if not os.path.exists(firefox_path):
+                print("Firefox path does not exist and firefox is not open. Please install Firefox or open it manually.")
+                continue
+            
+            print ("Opening Firefox")
+            ctypes.windll.shell32.ShellExecuteW(None, "open", firefox_path, None, None, 1)
+            continue
+        firefox_window = gw.getWindowsWithTitle('Mozilla Firefox')[0]
+        # Focus the Firefox window
+        firefox_window.activate()
+
+    
+        firefox_window.show()
+        firefox_window.maximize()
+
+        time.sleep(1)
+        if bool_create_new_window:
+            keyboard.press_and_release('ctrl+t')
+            time.sleep(3)
+            keyboard.write("https://chat.openai.com/")
+            keyboard.press_and_release('enter')
+            time.sleep(3)
+        else:
+            if(use_f5_refresh==True):
+                keyboard.press_and_release('ctrl+f5')
+        time.sleep(3)
+
+        time.sleep(0.1)
+        pyperclip.copy(t)
+        time.sleep(0.1)
+        keyboard.press_and_release('ctrl+v')
+        time.sleep(0.1)
+
+        keyboard.press_and_release('shift+enter')
+        time.sleep(0.1)
+
+        # Restore the original clipboard content
+        pyperclip.copy(clipboard_content)
+        time.sleep(0.1)
+        keyboard.press_and_release('ctrl+v')
+        time.sleep(0.1)
+        keyboard.press_and_release('enter')
+
+        if(len(prompt_text)>1):
+            time.sleep(time_when_several_prompts)
+
 
 
 
