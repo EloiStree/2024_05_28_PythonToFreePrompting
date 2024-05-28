@@ -4,6 +4,11 @@ import time
 import keyboard
 import pyperclip
 import pyautogui
+import ctypes
+import os
+
+
+bool_create_new_window = True
 
 
 # Threshold for trigger pressure (80%)
@@ -20,17 +25,37 @@ def prompt_chat_gpt_by_firefox(prompt_text):
     keyboard.press_and_release('ctrl+x')
 
     # Find the Firefox window by title
-    firefox_window = gw.getWindowsWithTitle('Mozilla Firefox')[0]
+    firefox_windows = gw.getWindowsWithTitle('Mozilla Firefox')
 
+    # Open Firefox if it's not already open
+    if firefox_windows is None or len(firefox_windows)==0:
+        
+        firefox_path = "C:/Program Files/Mozilla Firefox/firefox.exe"
+        
+        if not os.path.exists(firefox_path):
+            print("Firefox path does not exist and firefox is not open. Please install Firefox or open it manually.")
+            return
+        
+        print ("Opening Firefox")
+        ctypes.windll.shell32.ShellExecuteW(None, "open", firefox_path, None, None, 1)
+        return
+    firefox_window = gw.getWindowsWithTitle('Mozilla Firefox')[0]
     # Focus the Firefox window
     firefox_window.activate()
 
-    # Show and bring the Firefox window to the foreground
+   
     firefox_window.show()
     firefox_window.maximize()
 
     time.sleep(1)
-    keyboard.press_and_release('ctrl+f5')
+    if bool_create_new_window:
+        keyboard.press_and_release('ctrl+t')
+        time.sleep(3)
+        keyboard.write("https://chat.openai.com/")
+        keyboard.press_and_release('enter')
+        time.sleep(3)
+    else:
+        keyboard.press_and_release('ctrl+f5')
     time.sleep(3)
 
     clipboard_content = pyperclip.paste()
