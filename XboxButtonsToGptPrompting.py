@@ -8,6 +8,41 @@ import ctypes
 import os
 
 
+
+
+dico_prompting={}
+
+dico_prompting["A_DOWN"]=""
+dico_prompting["A_UP"]=""
+dico_prompting["B_DOWN"]=""
+dico_prompting["B_UP"]=""
+dico_prompting["Y_DOWN"]=""
+dico_prompting["Y_UP"]=""
+dico_prompting["X_DOWN"]=""
+dico_prompting["X_UP"]=""
+
+dico_prompting["DOWN_DOWN"]=""
+dico_prompting["UP_DOWN"]=""
+dico_prompting["RIGHT_DOWN"]=""
+dico_prompting["LEFT_DOWN"]=""
+
+dico_prompting["SIDE_RIGHT_DOWN"]=""
+dico_prompting["SIDE_LEFT_DOWN"]=""
+
+dico_prompting["THUMB_RIGHT_DOWN"]=""
+dico_prompting["THUMB_LEFT_DOWN"]=""
+
+
+
+
+dico_prompting["MENU_RIGHT_DOWN"]="Find me emoji representing following Text. Export in Markdown and in text"
+dico_prompting["MENU_LEFT_DOWN"]="Give me dictionnary definition of following word. Export in Markdown"
+
+
+dico_prompting["LEFT_TRIGGER_DOWN"]="Translate that in french and correct ponctuation. Export in Markdown"
+dico_prompting["RIGHT_TRIGGER_DOWN"]="Translate that in english and correct ponctuation. Export in Markdown"
+
+
 bool_create_new_window = True
 
 
@@ -77,34 +112,6 @@ def prompt_chat_gpt_by_firefox(prompt_text):
 
 
 
-dico_prompting={}
-
-dico_prompting["A_DOWN"]=""
-dico_prompting["A_UP"]=""
-dico_prompting["B_DOWN"]=""
-dico_prompting["B_UP"]=""
-dico_prompting["Y_DOWN"]=""
-dico_prompting["Y_UP"]=""
-dico_prompting["X_DOWN"]=""
-dico_prompting["X_UP"]=""
-
-dico_prompting["DOWN_DOWN"]=""
-dico_prompting["UP_DOWN"]=""
-dico_prompting["RIGHT_DOWN"]=""
-dico_prompting["LEFT_DOWN"]=""
-
-dico_prompting["SIDE_RIGHT_DOWN"]=""
-dico_prompting["SIDE_LEFT_DOWN"]=""
-
-dico_prompting["THUMB_RIGHT_DOWN"]=""
-dico_prompting["THUMB_LEFT_DOWN"]=""
-
-dico_prompting["MENU_RIGHT_DOWN"]="Is  right menu?"
-dico_prompting["MENU_LEFT_DOWN"]="Is left Menu?"
-
-
-dico_prompting["LEFT_TRIGGER_DOWN"]="Translate that in french and correct ponctuation. Export in Markdown"
-dico_prompting["RIGHT_TRIGGER_DOWN"]="Translate that in english and correct ponctuation. Export in Markdown"
 
 
 def listen_to_xbox_buttons():
